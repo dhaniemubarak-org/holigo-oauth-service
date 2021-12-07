@@ -18,13 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OauthUserService {
+public class UserService {
 
     private final JmsTemplate jmsTemplate;
 
     private final ObjectMapper objectMapper;
 
-    public UserAuthenticationDto getUserData(UserAuthenticationDto userAuthenticationDto)
+    public UserAuthenticationDto getUser(UserAuthenticationDto userAuthenticationDto)
             throws JMSException, JsonMappingException, JsonProcessingException {
         Message received = jmsTemplate.sendAndReceive(JmsConfig.OAUTH_USER_DATA_QUEUE, new MessageCreator() {
             @Override

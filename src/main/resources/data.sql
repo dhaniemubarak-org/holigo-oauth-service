@@ -1,0 +1,1 @@
+INSERT INTO CLIENT(id, created_at, updated_at, name, secret ) VALUES ('cb884cb3-23a7-426a-89e9-be9de872224e', now(), now(), 'Holigo Mobile Apps', 'ailwseuytvnweoriutygnpaioucthne' )

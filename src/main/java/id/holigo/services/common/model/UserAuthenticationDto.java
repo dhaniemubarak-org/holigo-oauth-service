@@ -1,6 +1,7 @@
 package id.holigo.services.common.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,8 @@ public class UserAuthenticationDto implements Serializable {
     private String phoneNumber;
 
     private AccountStatusEnum accountStatusEnum;
+
+    private Collection<String> authorities;
 
     private String type;
 

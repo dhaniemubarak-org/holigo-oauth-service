@@ -9,6 +9,8 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 public class JmsConfig {
     public static final String OAUTH_USER_DATA_QUEUE = "oauth-user-data";
+    public static final String OAUTH_QUEUE = "oauth";
+    public static final String CREATE_ACCESS_TOKEN_QUEUE = "create-access-token-queue";
 
     @Bean
     public MessageConverter jacksonJmsMessageConverter() {
