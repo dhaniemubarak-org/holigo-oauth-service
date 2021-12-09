@@ -43,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+        private final static String HEADER_USER_LOCATION = "/api/v1/users/";
         private final AuthenticationManager authenticationManager;
 
         private final ClientRepository clientRepository;
@@ -74,10 +75,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 String oneTimePassword = request.getParameter("oneTimePassword");
                 UUID clientId = UUID.fromString(request.getParameter("clientId"));
                 String clientSecret = request.getParameter("clientSecret");
-                log.info("phoneNumber is {}", phoneNumber);
-                log.info("oneTimePassword is {}", oneTimePassword);
-                log.info("clientId is {}", clientId);
-                log.info("clientSecret is {}", clientSecret);
                 Optional<Client> fetchClient = clientRepository.findByIdAndSecret(clientId, clientSecret);
 
                 if (fetchClient.isEmpty()) {
@@ -121,6 +118,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 tokens.put("expiresIn", expiresIn);
                 tokens.put("refreshToken", refreshToken);
                 response.setContentType(APPLICATION_JSON_VALUE);
+                response.setHeader("Location", HEADER_USER_LOCATION + userAuthenticationDto.getId());
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
         }
 

@@ -7,7 +7,7 @@ FROM openjdk:17.0-jdk-oracle
 LABEL   PROJECT_NAME={project.artifactId} \
     PROJECT=${project.id}
 
-EXPOSE 9090
+EXPOSE 8082
 
 WORKDIR /application
 COPY --from=builder /application/dependencies/ ./
