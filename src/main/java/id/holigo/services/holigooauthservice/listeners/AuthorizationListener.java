@@ -72,7 +72,7 @@ public class AuthorizationListener {
             }
 
         } catch (Exception e) {
-            log.info("Exception in listen");
+            log.info("Exception in listen : " + e.getMessage());
             oauthDto.setValid(false);
         }
         jmsTemplate.convertAndSend(message.getJMSReplyTo(), oauthDto);

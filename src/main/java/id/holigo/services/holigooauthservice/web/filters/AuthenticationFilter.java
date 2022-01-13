@@ -37,6 +37,7 @@ import id.holigo.services.holigooauthservice.services.AccessTokenService;
 import id.holigo.services.holigooauthservice.services.AccessTokenServiceImpl;
 import id.holigo.services.holigooauthservice.services.OauthServiceImpl;
 import id.holigo.services.holigooauthservice.services.RefreshTokenService;
+import id.holigo.services.holigooauthservice.services.RefreshTokenServiceImpl;
 import id.holigo.services.holigooauthservice.services.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,10 +54,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         private final AccessTokenService accessTokenService;
 
         private final RefreshTokenService refreshTokenService;
-
-        public static final Long ACCESS_TOKEN_EXPIRES = System.currentTimeMillis() + 30 * 60 * 10000;
-
-        public static final Long REFRESH_TOKEN_EXPIRES = System.currentTimeMillis() + 30 * 60 * 100000;
 
         public AuthenticationFilter(AuthenticationManager authenticationManager, ClientRepository clientRepository,
                         UserService userService, AccessTokenService accessTokenService,
@@ -126,7 +123,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                         String issuer) {
                 return JWT.create().withSubject(userAuthenticationDto.getId().toString())
                                 .withJWTId(accessTokenObj.getId().toString())
-                                .withExpiresAt(new Date(ACCESS_TOKEN_EXPIRES)).withIssuer(issuer)
+                                .withExpiresAt(new Date(AccessTokenServiceImpl.ACCESS_TOKEN_EXPIRES)).withIssuer(issuer)
                                 .withClaim("authorities",
                                                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                                                                 .collect(Collectors.toList()))
@@ -136,7 +133,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         private String refreshToken(UserAuthenticationDto userAuthenticationDto, RefreshToken refreshTokenObj,
                         String issuer) {
                 return JWT.create().withSubject(userAuthenticationDto.getId().toString())
-                                .withExpiresAt(new Date(REFRESH_TOKEN_EXPIRES))
+                                .withExpiresAt(new Date(RefreshTokenServiceImpl.REFRESH_TOKEN_EXPIRES))
                                 .withJWTId(refreshTokenObj.getId().toString()).withIssuer(issuer)
                                 .sign(OauthServiceImpl.ALGORITHM);
         }
