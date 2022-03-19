@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserAuthenticationDto implements Serializable {
 
     static final long serialVersionUID = -5815566940065181210L;
-    
+
     private Long id;
 
     private String phoneNumber;
@@ -35,4 +35,6 @@ public class UserAuthenticationDto implements Serializable {
     private Boolean credentialsNonExpired;
 
     private Boolean enabled;
+
+    private UserGroupEnum userGroup;
 }

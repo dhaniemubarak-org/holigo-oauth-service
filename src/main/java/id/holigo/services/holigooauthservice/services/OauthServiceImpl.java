@@ -75,6 +75,8 @@ public class OauthServiceImpl implements OauthService {
                                 .withExpiresAt(new Date(AccessTokenServiceImpl.ACCESS_TOKEN_EXPIRES)).withIssuer(issuer)
                                 .withClaim("authorities", user.getAuthorities().stream()
                                                 .map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                                .withClaim("type", userAuthenticationDto.getType())
+                                .withClaim("group", userAuthenticationDto.getUserGroup().toString())
                                 .sign(ALGORITHM);
         }
 

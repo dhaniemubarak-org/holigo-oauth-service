@@ -127,6 +127,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                 .withClaim("authorities",
                                                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                                                                 .collect(Collectors.toList()))
+                                .withClaim("type", userAuthenticationDto.getType())
+                                .withClaim("group", userAuthenticationDto.getUserGroup().toString())
                                 .sign(OauthServiceImpl.ALGORITHM);
         }
 
