@@ -12,6 +12,8 @@ public class JmsConfig {
     public static final String OAUTH_QUEUE = "oauth";
     public static final String CREATE_ACCESS_TOKEN_QUEUE = "create-access-token-queue";
 
+    public static final String OAUTH_RESET_OTP_QUEUE = "oauth-reset-otp-queue";
+
     @Bean
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();

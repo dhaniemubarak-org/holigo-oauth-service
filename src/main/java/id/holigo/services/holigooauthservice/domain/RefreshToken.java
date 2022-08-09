@@ -34,6 +34,6 @@ public class RefreshToken {
     private UUID id;
     @OneToOne(fetch = LAZY)
     AccessToken accessToken;
-    private boolean refoked;
+    private boolean revoked;
     private Timestamp expiredAt;
 }

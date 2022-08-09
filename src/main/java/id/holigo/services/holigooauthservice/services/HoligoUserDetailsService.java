@@ -30,22 +30,19 @@ public class HoligoUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
         userAuthenticationDto.setPhoneNumber(phoneNumber);
-        UserAuthenticationDto user = null;
+        UserAuthenticationDto user;
         try {
             user = userService.getUser(userAuthenticationDto);
         } catch (JsonProcessingException | JMSException e) {
             throw new UsernameNotFoundException("Failed! User not found!");
         }
         if (user == null) {
-            log.info("User not found in the database");
             throw new UsernameNotFoundException("User not found!");
         } else {
             log.info("User -> {}", user);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getAuthorities().forEach(authority -> {
-            authorities.add(new SimpleGrantedAuthority(authority));
-        });
+        user.getAuthorities().forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority)));
         return new User(user.getPhoneNumber(), user.getOneTimePassword(), authorities);
     }
 

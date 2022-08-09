@@ -22,7 +22,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken createRefreshToken(AccessToken accessToken) throws IOException {
         RefreshToken refreshTokenObj = new RefreshToken();
-        refreshTokenObj.setRefoked(false);
+        refreshTokenObj.setRevoked(false);
         refreshTokenObj.setAccessToken(accessToken);
         refreshTokenObj.setExpiredAt(new Timestamp(REFRESH_TOKEN_EXPIRES));
 

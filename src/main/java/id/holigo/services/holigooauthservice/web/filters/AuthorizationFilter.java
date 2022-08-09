@@ -49,9 +49,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     String username = decodedJWT.getSubject();
                     String[] fetchAuthorities = decodedJWT.getClaim("authorities").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    stream(fetchAuthorities).forEach(authority -> {
-                        authorities.add(new SimpleGrantedAuthority(authority));
-                    });
+                    stream(fetchAuthorities).forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority)));
 
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             username, null, authorities);
@@ -59,7 +57,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
 
                 } catch (Exception e) {
-                    log.info("Error logging in: {}", e.getMessage());
                     Map<String, String> error = new HashMap<>();
                     error.put("error_message", "Unauthorize");
                     response.setStatus(UNAUTHORIZED.value());
