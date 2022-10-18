@@ -14,7 +14,7 @@ public interface OauthService {
     OauthAccessTokenDto create(UserAuthenticationDto userAuthenticationDto, User user, Client client,
             String issuer) throws IOException;
 
-    OauthAccessTokenDto createAcccessTokenWithAuthentication(UserAuthenticationDto userAuthenticationDto, Client client,
+    OauthAccessTokenDto createAccessTokenWithAuthentication(UserAuthenticationDto userAuthenticationDto, Client client,
             String issuer) throws IOException;
 
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken(String phoneNumber, String oneTimePassword);
