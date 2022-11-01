@@ -2,6 +2,7 @@ package id.holigo.services.holigooauthservice.services;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         if (savedAccessToken.getId() == null) {
             throw new IOException("Opps, Internal server error");
         }
+        accessTokenRepository.revokeAccessToken(1, Timestamp.valueOf(LocalDateTime.now()), userAuthenticationDto.getId(), savedAccessToken.getId());
         return savedAccessToken;
     }
 
