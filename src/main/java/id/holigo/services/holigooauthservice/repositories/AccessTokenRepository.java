@@ -13,6 +13,6 @@ import org.springframework.data.repository.query.Param;
 public interface AccessTokenRepository extends JpaRepository<AccessToken, UUID> {
 
     @Modifying
-    @Query(value = "UPDATE AccessToken t SET t.revoked = :revoked , t.updated_at = :updatedAt WHERE t.user_id = :userId AND id <> :id", nativeQuery = true)
-    void revokeAccessToken(@Param("revoked") int revoked, @Param("updatedAt") Timestamp updatedAt, @Param("userId") Long userId, @Param("id") UUID id);
+    @Query(value = "UPDATE AccessToken t SET t.revoked = :revoked , t.updatedAt = :updatedAt WHERE t.userId = :userId AND t.id <> :id")
+    void revokeAccessToken(@Param("revoked") Boolean revoked, @Param("updatedAt") Timestamp updatedAt, @Param("userId") Long userId, @Param("id") UUID id);
 }

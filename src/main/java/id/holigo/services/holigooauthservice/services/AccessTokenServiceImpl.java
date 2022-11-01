@@ -11,6 +11,9 @@ import id.holigo.services.holigooauthservice.domain.AccessToken;
 import id.holigo.services.holigooauthservice.domain.Client;
 import id.holigo.services.holigooauthservice.repositories.AccessTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.security.sasl.AuthenticationException;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +23,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
     private final AccessTokenRepository accessTokenRepository;
 
+    @Transactional
     @Override
     public AccessToken createAccessToken(UserAuthenticationDto userAuthenticationDto, Client client)
             throws IOException {
@@ -33,9 +37,9 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
         AccessToken savedAccessToken = accessTokenRepository.save(accessTokenObj);
         if (savedAccessToken.getId() == null) {
-            throw new IOException("Opps, Internal server error");
+            throw new AuthenticationException();
         }
-        accessTokenRepository.revokeAccessToken(1, Timestamp.valueOf(LocalDateTime.now()), userAuthenticationDto.getId(), savedAccessToken.getId());
+        accessTokenRepository.revokeAccessToken(true, Timestamp.valueOf(LocalDateTime.now()), userAuthenticationDto.getId(), savedAccessToken.getId());
         return savedAccessToken;
     }
 

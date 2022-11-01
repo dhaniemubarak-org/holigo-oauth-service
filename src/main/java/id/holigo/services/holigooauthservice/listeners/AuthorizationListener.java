@@ -11,6 +11,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import id.holigo.services.holigooauthservice.web.exceptions.AuthenticationException;
 import org.springframework.jms.JmsException;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
@@ -25,9 +26,7 @@ import id.holigo.services.holigooauthservice.domain.AccessToken;
 import id.holigo.services.holigooauthservice.repositories.AccessTokenRepository;
 import id.holigo.services.holigooauthservice.services.OauthServiceImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AuthorizationListener {
@@ -39,10 +38,8 @@ public class AuthorizationListener {
     @JmsListener(destination = JmsConfig.OAUTH_QUEUE)
     public void listen(@Payload OauthDto oauthDto, @Headers MessageHeaders headers, Message message)
             throws JmsException, JMSException {
-        log.info("listen authorization is running.....");
         try {
             String token = oauthDto.getToken();
-            log.info("token -> {}", token);
             Algorithm algorithm = OauthServiceImpl.ALGORITHM;
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
@@ -51,13 +48,10 @@ public class AuthorizationListener {
             Optional<AccessToken> fetchAccessToken = accessTokenRepository
                     .findById(UUID.fromString(decodedJWT.getId()));
             if (fetchAccessToken.isPresent()) {
-                log.info("accessToken isPresent");
                 AccessToken accessToken = fetchAccessToken.get();
                 if (accessToken.getRevoked()) {
-                    log.info("revoked detected...");
-                    throw new Exception("Please login...");
+                    throw new AuthenticationException();
                 } else {
-                    log.info("Valid");
                     oauthDto.setValid(true);
                     oauthDto.setId(decodedJWT.getId());
                     oauthDto.setSubject(subject);
@@ -67,17 +61,13 @@ public class AuthorizationListener {
                 }
 
             } else {
-                log.info("accessToken not present...");
-                throw new Exception("Please login...");
+                throw new AuthenticationException();
             }
 
         } catch (Exception e) {
-            log.info("Exception in listen : " + e.getMessage());
             oauthDto.setValid(false);
         }
         jmsTemplate.convertAndSend(message.getJMSReplyTo(), oauthDto);
-        log.info("Reply sent, oauthDto -> {}", oauthDto);
-
         jmsTemplate.convertAndSend(message.getJMSReplyTo(), oauthDto);
     }
 
